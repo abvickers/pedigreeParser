@@ -1,0 +1,95 @@
+[33mcommit dba1e84039878a21d477a092540a402bd2ce323c[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: abvickers <abvickers@vt.edu>
+Date:   Wed Aug 26 13:33:19 2020 -0400
+
+    finished work on checkParen, almost done with adding stack to parsePed
+
+[33mcommit 89abbb56575ed6edc01be9ce0fedaa030970f3cd[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Thu Aug 13 11:56:58 2020 -0400
+
+    fixed issues with parisped, but still needs work when same parent used many times
+
+[33mcommit dc15ddfe84de5f2c12ef4fccbb8f21cf0e1adbe5[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Thu Aug 13 11:56:02 2020 -0400
+
+    added dependencies
+
+[33mcommit 00049d0b62f64f14d6f3c71abe503ae6a2523082[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Wed Aug 12 15:52:47 2020 -0400
+
+    separate out helper functions, recombine into single library when done
+
+[33mcommit 6c862e25445ed978fc5dd85ae1223b5a49c7659d[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Tue Aug 11 14:36:27 2020 -0400
+
+    added functions to check parentheses, process Backcrosses, better paren removal
+
+[33mcommit 2776d0203caf64c07bd7ab3954acdd50efc9c830[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Tue Aug 11 06:18:22 2020 -0400
+
+    parses nested, but still running into issues when same parent used multiple times
+
+[33mcommit 24e619a40ca1eea529ea95da215912e2e6816a48[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sun Aug 9 14:08:59 2020 -0400
+
+    allow for asterick in line name, match only first instance, eg .*?
+
+[33mcommit c1e068b5ae5d25573fbf3938416d291aade420ba[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sun Aug 9 08:16:50 2020 -0400
+
+    parses nested pedigrees now. Much changes to code
+
+[33mcommit ad802651fa7aaa97cee6ee449c72db052d17c0ec[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Fri Aug 7 15:48:15 2020 -0400
+
+    added annotations so that Aaron can have a crack at it
+
+[33mcommit 474b150f5f3383b373414e0de5a467c59f921ae9[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Fri Aug 7 15:00:32 2020 -0400
+
+    print parent lines, etc.
+
+[33mcommit 25898e8970e72389befb71b7254aa299bfb964df[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Fri Aug 7 14:59:50 2020 -0400
+
+    allow brackets
+
+[33mcommit 92bfa7cc20a298c32d5bee03802de19c84d9dd39[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sat Jul 11 11:53:30 2020 -0400
+
+    fix bullets
+
+[33mcommit f925cf9c47462353eaf8591165093491e7011504[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sat Jul 11 11:52:04 2020 -0400
+
+    update example
+
+[33mcommit 800f36704dde402fa5ed4fdbfff2fecbe8f5e8b5[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sat Jul 11 11:43:26 2020 -0400
+
+    example pedigree file
+
+[33mcommit 789b90f6c71618014c66d07f9b878a92f1e4c0ed[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sat Jul 11 11:42:52 2020 -0400
+
+    inital parser, still needs nested functionality
+
+[33mcommit 0e6fe32e3851c67320c61edf81562c065a30ebdc[m
+Author: Nicholas Santantonio <ns722@cornell.edu>
+Date:   Sat Jul 11 11:42:25 2020 -0400
+
+    add readme
