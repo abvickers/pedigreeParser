@@ -47,6 +47,7 @@ stackraw = []
 stackproc = []
 
 kickfile = open(kick, "w")
+backcrossfile = open("backcross.txt", "w")
 
 # file='ped.txt'
 # out = 'testrun'
@@ -58,15 +59,21 @@ kickfile = open(kick, "w")
 # should we try to have exactly one space before and after each cross indicator?
 
 def writePed(lineped, na = "", count = 0):
-    if checkParen.checkParen(lineped[1]) == "Unbalanced":
-        kickfile.write(lineped[0] + " , " + lineped[1] + "\n")
-        return
+    #if checkParen.checkParen(lineped[1]) == "Unbalanced":
+    #    kickfile.write(lineped[0] + " , " + lineped[1] + "\n")
+    #    return
     # remove nested pedigrees
     pedNoPar = stripNested.rmInParen(lineped[1])
     # if backcross characters in pedigree, process them
-    if re.search(r'\*',lineped[1]):
+    if re.search(r'\*',pedNoPar):
+        print(pedNoPar)
         pedNoPar = formatBC.formatBC(pedNoPar)
-    # may need to find a way to edit the orginial pedigree as well, to replace AAA*2/ with e.g. AAA//AAA/ 
+        print(pedNoPar)
+        if re.search('\s*\(.*?\)|\s*\[.*?\]',lineped[1]):
+            print("hi")
+            backcrossfile.write(lineped[1] + "\n")
+        lineped[1] = pedNoPar
+    # may need to find a way to edit the orginial pedigree as wel   l, to replace AAA*2/ with e.g. AAA//AAA/ 
 
     # find last cross character/pattern
     lc = getLastCross.getLastCross(pedNoPar)
@@ -93,7 +100,7 @@ def writePed(lineped, na = "", count = 0):
         for p in parisnotped:
             # get parental string, with info in parentheses/brackets if exists
             parPed = re.findall(mf[p+1] + '\s*\(.*?\)\|' + mf[p+1] + '\s*\[.*?\]', lineped[1])
-
+            
             # If there is a nested pedigree in parentheses/brackets, process it
             if len(parPed):
                 # get parent information in nested pedigree
@@ -113,7 +120,7 @@ def writePed(lineped, na = "", count = 0):
                     parinfo = re.findall('\(.*?\)|\[.*?\]', parPed[0])[0]
                     parlineped = [parents[0], parinfo[1:len(parinfo)-1]]
                     if re.search(r'/', parlineped[1]):
-                        writePed(parlineped, count = count + 1)
+                        writePed(parlineped, count = 1)
                     else:
                         if args.parents:
                             alias = [parlineped[0], na, na, parlineped[1]]
@@ -138,17 +145,17 @@ def writePed(lineped, na = "", count = 0):
                 # get first parent in string
                 p1 = re.sub(r'\*', '\*', psplit[0])
                 # get last parent in string
-                pl = re.sub(r'\*', '\*', psplit[len(psplit)-1])
+                pn = re.sub(r'\*', '\*', psplit[len(psplit)-1])
 
                 # Find string starting with first parent, ending with last parent, plus any nested info/ped it may have
                 # this is kinda hacky. Matches first match, or truncate string begining to grab the second match, by selecting the shortest of 2 matches
-                pindex = getShortMatch.getShortMatch(p1, pl, lineped[1]) # This needs fixd, does not work for some circumstances (McCormick example)
-                parPed = re.findall(p1 + '.*?' + pl + '\s*\(.*?\)|' + p1 + '.*' + pl + '\s*\[.*?\]', lineped[1][pindex[0]:])
+                pindex = getShortMatch.getShortMatch(p1, pn, lineped[1]) # This needs fixd, does not work for some circumstances (McCormick example)
+                parPed = re.findall(p1 + '.*?' + pn + '\s*\(.*?\)|' + p1 + '.*' + pn + '\s*\[.*?\]', lineped[1][pindex[0]:])
                                 
                 if not len(parPed):
                     # if the same parent is used twice, then this breaks cause it grabs 
                     # good for first match (lazy) , problem for second. I.e. 'abc / xyz // xyz / def' returns 'abc / xyz' for first, but 'xyz // xyz / def' for second... FML                   
-                    parPed = re.findall(p1 + '.*?' + pl, lineped[1][pindex[0]:])
+                    parPed = re.findall(p1 + '.*?' + pn, lineped[1][pindex[0]:])
                     # This is still an unknown potential source or problems, matching strings multiple times. 
                     # Unsure what degree this will happen. Perhaps write to error file if occurs?
                 if len(parPed) > 1:
@@ -161,15 +168,19 @@ def writePed(lineped, na = "", count = 0):
                     # parPed = p.split(getLastCross.getLastCross(p))
                 
                 # send back to writePed as line mother father
-                writePed([p] + parPed, count = count + 1)
+                writePed([p] + parPed, count = 1)
         # if -p option, then write each (simple) parent as its own line
     else:
         # print("there is no cross here, printing parent:")
         # if no last cross ,just write parent
         if args.parents:
             mf = [lineped[0], na, na]
-            # print(mf)
+            if count == 0:
+                stackproc.append(mf[1:])
             outfile.write(outsep.join(mf) + "\n")
+            
+            
+            
 
 
 
@@ -226,24 +237,25 @@ with open(file) as f:
             if len(l) > 2:
                 warnings.warn("more than one deliminator found, check error file")
                 kickfile.write(",".join(l) + '\n')
-                print(l)
+            elif checkParen.checkParen(l[1]) == "Unbalanced":
+                kickfile.write(l[0] + " , " + l[1] + "\n")
+            #elif re.search(r'\*',l[1]):
+            #    backcrossfile.write(l[0] + " , " + l[1] + "\n")
             else:
                 if l[1] not in stackraw:
                     stackraw.append(l[1])
-                    writePed(l, na = miss)
+                    writePed(l, na = miss, count = 0)
                 else:
                     #index = [ i for i, x in enumerate(stackraw) if x==1 ]
                     whichstack = stackraw.index(l[1])
-                    #outfile.write("\t".join(stackproc[whichstack]))
-            #add processed stack, 
+                    #currently giving strange output, skipping over some lines and repeating others
+                    outfile.write(l[0] + "\t" + "\t".join(stackproc[whichstack]) + "\n")
+            #add processed stack,
             #write line + already processed pedigree
             #if in stack, add new line of l[0]?
-print(whichstack)
-print(len(stackproc))   
-print(len(stackraw))   
-print(stackproc)
+print(len(stackproc))
 print("\n")
-print(stackraw)
+print(len(stackraw))
 outfile.close()
 kickfile.close()
 
