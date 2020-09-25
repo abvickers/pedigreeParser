@@ -31,6 +31,7 @@ parser.add_argument('-p', '--parents', action = 'store_true', help='print parent
 parser.add_argument('-n', '--nested', action = 'store_true', help='parse nested pedigrees')
 parser.add_argument('-S', '--skip', help='skip n lines', type = int, default = 0)
 parser.add_argument('-b', '--buffer', help = 'how many pedigrees should be kept in working memory', type = int, default = 50)
+parser.add_argument('-i', '--ignore', help = 'what pedigrees to ignore', type = str, default = "")
 args = parser.parse_args()
 
 # assign arguments to shorter variable names
@@ -41,6 +42,7 @@ outsep = args.outsep
 rmChar = args.remove
 miss = args.missing
 skip = args.skip
+ignore = args.ignore
 kick = "check.txt"
 stacklen = args.buffer
 stackraw = []
